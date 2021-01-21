@@ -1,2 +1,8 @@
 # VueJS-Demo-Resources
- Add new Resources and delete, a demo with provide, data and functions from component to component
+
+ Save resources in Firebase <br/>
+ > Print all resources <br/>
+ > Add new resources - with form <br/>
+ > Delete resources <br/>
+ > Show Loading ... in get request until print resources <br/>
+ > catch errors <br/>

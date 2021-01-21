@@ -71,7 +71,22 @@ export default {
       this.inputIsInvalid = false;
 
       // add the new resource
-      this.addResource(enteredTitle,enteredDescription, enteredLink);
+      // Add a timestamp for the unique id
+      const currId = new Date().toISOString();
+      this.addResource(currId, enteredTitle, enteredDescription, enteredLink);
+
+      fetch('https://vuejs-demo-resources-default-rtdb.europe-west1.firebasedatabase.app/resources.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify({
+          id: currId,
+          title: enteredTitle,
+          description: enteredDescription,
+          url: enteredLink,
+        }),
+      });
 
       // clear fields from form
       this.clearFormFields();

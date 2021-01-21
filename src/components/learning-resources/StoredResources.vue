@@ -1,5 +1,13 @@
 <template>
-  <ul>
+
+  <p v-if="isLoading"> Loading ... </p>
+
+  <!-- Database and app resources is empty OR null -->
+  <p v-else-if="!isLoading && ( !resources || resources.length === 0 )"> Resources is empty! Add some resources first! </p>
+  
+  <!-- Render all the resources -->
+  <ul v-else-if="!isLoading && resources && resources.length > 0">
+
     <!-- provide resource data in Learning Resource Component to render it -->
     <learning-resource
     v-for="rsrc in resources"
@@ -10,6 +18,7 @@
     :link="rsrc.link"
     :rsrc1="rsrc.id"
     > </learning-resource>
+    
   </ul>
 </template>
 
@@ -17,11 +26,12 @@
 import LearningResource from './LearningResource.vue';
 
 export default {
-  // get data resources -- from App.vue
+  // get data resources -- from TheResources.vue
   inject: [ 'resources' ],
+  props: [ 'isLoading' ],
   components: {
     LearningResource,
-  }
+  },
 }
 </script>
 

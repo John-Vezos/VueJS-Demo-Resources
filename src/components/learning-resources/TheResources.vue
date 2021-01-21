@@ -1,4 +1,5 @@
 <template>
+
   <base-card>
     <!-- each button for each tab -->
     <base-button 
@@ -17,7 +18,7 @@
   <!-- keep alive save the data in cache -->
   <!-- call the tab -->
   <keep-alive>
-    <component :is="selectedTab"> </component>
+    <component :is="selectedTab" :="currentTabProperties"> </component>
   </keep-alive>
 </template>
 
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       selectedTab: 'stored-resources',
+      isLoading: false,
       storedResources: [
         {
           id: 'official-guide',
@@ -58,37 +60,80 @@ export default {
     };
   },
   methods: {
+    
+    // load resources from Firebase -- Database
+    loadDbResources() {
+      
+      this.isLoading = true;
+      fetch('https://vuejs-demo-resources-default-rtdb.europe-west1.firebasedatabase.app/resources.json')
+        .then( (response) => {
+          if(response.ok) {
+            return response.json();
+          }
+        })
+        .then( (data)  => {
+          this.isLoading = false;
+          for (const id in data) {
+            this.storedResources.unshift({
+              id: data[id].id,
+              title: data[id].title,
+              description: data[id].description,
+              link: data[id].url,
+            });
+          }
+        });
+
+    },
+
     // choose tab
     setSelectedTab(currTab) {
       this.selectedTab = currTab;
     },
+
     // add a new resource in storedResources
-    addResource(title, description, url) {
+    addResource(id, title, description, url) {
       const newResource = {
-        id: new Date().toISOString(),
+        id: id,
         title: title,
         description: description,
         link: url,
       };
       this.storedResources.unshift(newResource);
+      
+      // select stored resources tab
       this.selectedTab = 'stored-resources';
     },
+
     // delete resource from storedResources
     removeResource(resId) {
       const resIndex = this.storedResources.findIndex(res => res.id === resId )
       
       // delete if the resource exist
       if (resIndex >= 0) this.storedResources.splice(resIndex, 1);
-    }
+    },
+
   },
   computed: {
+
     // aesthetic options
     storedResButtonMode() {
       return this.selectedTab === 'stored-resources' ? null : 'flat';
     },
+
+    // aesthetic options
     addRessButtonMode() {
       return this.selectedTab === 'add-resource' ? null : "flat";
     },
+
+
+    // if it's stored-resources props: isLoading for loading info
+    currentTabProperties() {
+      return this.selectedTab === 'stored-resources' ? { isLoading: this.isLoading } : null;
+    },
+
+  },
+  mounted() {
+    this.loadDbResources(); // call the method to get and render all the resources
   }
 }
 

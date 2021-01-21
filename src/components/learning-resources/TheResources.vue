@@ -66,6 +66,7 @@ export default {
     loadDbResources() {
       
       this.isLoading = true;
+      this.errorMessage = null;
       fetch('https://vuejs-demo-resources-default-rtdb.europe-west1.firebasedatabase.app/resources.json')
         .then( (response) => {
           if(response.ok) {

@@ -1,5 +1,7 @@
 <template>
 
+  <p v-if="errorMessage"> {{ errorMessage }} </p>
+
   <!-- close the base dialog when click out of the border -->
   <base-dialog v-if="inputIsInvalid" title="Invalid Input" @close="confirmError">
     
@@ -52,6 +54,7 @@ export default {
   data() {
     return {
       inputIsInvalid: false,
+      errorMessage: null,
     };
   },
   methods: {
@@ -73,8 +76,9 @@ export default {
       // add the new resource
       // Add a timestamp for the unique id
       const currId = new Date().toISOString();
-      this.addResource(currId, enteredTitle, enteredDescription, enteredLink);
+      
 
+      this.errorMessage = null;
       fetch('https://vuejs-demo-resources-default-rtdb.europe-west1.firebasedatabase.app/resources.json', {
         method: 'POST',
         headers: {
@@ -86,6 +90,17 @@ export default {
           description: enteredDescription,
           url: enteredLink,
         }),
+      })
+      .then( (response) => {
+        if (response.ok) {
+          this.addResource(currId, enteredTitle, enteredDescription, enteredLink);
+        } else {
+          throw new Error('Could not save data!');
+        }
+      })
+      .catch( (error) => {
+        console.log(error);
+        this.errorMessage = error.message;
       });
 
       // clear fields from form

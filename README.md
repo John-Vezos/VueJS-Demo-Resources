@@ -1,8 +1,8 @@
 # VueJS-Demo-Resources
 
- Save resources in Firebase
- > Print all resources
- > Add new resources - with form
- > Delete resources
- > Show Loading ... in get request until print resources
- > catch errors
+ Save resources in Firebase <br/>
+ > Print all resources <br/>
+ > Add new resources - with form <br/>
+ > Delete resources <br/>
+ > Show Loading ... in get request until print resources <br/>
+ > catch errors <br/>

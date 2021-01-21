@@ -2,11 +2,13 @@
 
   <p v-if="isLoading"> Loading ... </p>
 
+  <p v-if="!isLoading && errorMessage"> {{ errorMessage }} </p>
+
   <!-- Database and app resources is empty OR null -->
   <p v-else-if="!isLoading && ( !resources || resources.length === 0 )"> Resources is empty! Add some resources first! </p>
   
   <!-- Render all the resources -->
-  <ul v-else-if="!isLoading && resources && resources.length > 0">
+  <ul v-else>
 
     <!-- provide resource data in Learning Resource Component to render it -->
     <learning-resource
@@ -28,7 +30,7 @@ import LearningResource from './LearningResource.vue';
 export default {
   // get data resources -- from TheResources.vue
   inject: [ 'resources' ],
-  props: [ 'isLoading' ],
+  props: [ 'isLoading', 'errorMessage' ],
   components: {
     LearningResource,
   },

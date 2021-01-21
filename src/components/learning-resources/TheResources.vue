@@ -36,6 +36,7 @@ export default {
     return {
       selectedTab: 'stored-resources',
       isLoading: false,
+      errorMessage: null,
       storedResources: [
         {
           id: 'official-guide',
@@ -81,6 +82,11 @@ export default {
               link: data[id].url,
             });
           }
+        })
+        .catch( (error) => {
+          console.log(error);
+          this.isLoading = false;
+          this.errorMessage = 'Failed to get data from firebase - please try again later!';
         });
 
     },
@@ -128,7 +134,7 @@ export default {
 
     // if it's stored-resources props: isLoading for loading info
     currentTabProperties() {
-      return this.selectedTab === 'stored-resources' ? { isLoading: this.isLoading } : null;
+      return this.selectedTab === 'stored-resources' ? { isLoading: this.isLoading, errorMessage: this.errorMessage } : null;
     },
 
   },
